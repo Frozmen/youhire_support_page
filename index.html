@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  
+<script src="https://js.stripe.com/v3"></script>
+
+<div id="error-message"></div>
+
+<script>
+(function() {
+  var stripe = Stripe('pk_live_lHeDbRpw4qnoEw0VMrtrsUrD00fZnjzPQp');
+
+   stripe.redirectToCheckout({
+      items: [{plan: 'youhire_support', quantity: 1}],
+
+      // Do not rely on the redirect to the successUrl for fulfilling
+      // purchases, customers may not always reach the success_url after
+      // a successful payment.
+      // Instead use one of the strategies described in
+      // https://stripe.com/docs/payments/checkout/fulfillment
+      successUrl: 'https://auxility.ca/success',
+      cancelUrl: 'https://auxility.ca/canceled',
+    })
+    .then(function (result) {
+      if (result.error) {
+        // If `redirectToCheckout` fails due to a browser or network
+        // error, display the localized error message to your customer.
+        var displayError = document.getElementById('error-message');
+        displayError.textContent = result.error.message;
+      }
+    });
+})();
+</script>
+</html>
